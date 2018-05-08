@@ -1,0 +1,627 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={LC1 Fitting functions},
+            pdfauthor={Harm Manders},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{LC1 Fitting functions}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Harm Manders}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \date{}
+  \predate{}\postdate{}
+
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=}\KeywordTok{ls}\NormalTok{()) }\CommentTok{# clear the workspace.. always a good idea before you start a new project}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{321}\NormalTok{) }\CommentTok{# so we will all be talking about the same random results}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"/home/harm/Uni/cogmod/LC1"}\NormalTok{) }\CommentTok{# set to your working dir with the files you need. }
+\end{Highlighting}
+\end{Shaded}
+
+\section{1 creating a function}\label{creating-a-function}
+
+Creating functions in R is easy. The basic structure is:\\
+\emph{function\_name} \textless{}- \textbf{function}(list of variables)
+\{
+
+do something with variables
+
+\textbf{return}(another variable)\\
+\}
+
+for example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{himmelblau <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,y)\{}
+\NormalTok{  h=(x}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{y}\OperatorTok{-}\DecValTok{11}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{(x}\OperatorTok{+}\NormalTok{y}\OperatorTok{^}\DecValTok{2}\OperatorTok{-}\DecValTok{7}\NormalTok{)}\OperatorTok{^}\DecValTok{2}
+  \KeywordTok{return}\NormalTok{(h)}
+\NormalTok{\}}
+
+\CommentTok{# call the function:}
+\KeywordTok{himmelblau}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 32
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## or just enter a list of variable v = c(x,y)}
+\NormalTok{himmelblau <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(v)\{}
+\NormalTok{  x<-v[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  y<-v[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  h=(x}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{y}\OperatorTok{-}\DecValTok{11}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{(x}\OperatorTok{+}\NormalTok{y}\OperatorTok{^}\DecValTok{2}\OperatorTok{-}\DecValTok{7}\NormalTok{)}\OperatorTok{^}\DecValTok{2}
+  \KeywordTok{return}\NormalTok{(h)}
+\NormalTok{\}}
+\CommentTok{# now call the function with a list:}
+\KeywordTok{himmelblau}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 32
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{2 Fitting a function to data}\label{fitting-a-function-to-data}
+
+In this exercise we will fit different functions to data and compare
+their fits. In the first step we will generate the data, in the second
+step we will fit different functions to it. This exercise will also be
+used to illustrate the difference between fit and prediction.\\
+***
+
+\subsubsection{2.1 Generating Simulation
+data}\label{generating-simulation-data}
+
+\subsubsection{\texorpdfstring{Q1 To begin write your first function:
+\[y = e^{\frac{(.3 \cdot x)}{2}}\] and call this function \emph{curve}.
+To be clear the input should be \emph{x} and it should return \emph{y}.
+(1
+point)}{Q1 To begin write your first function: y = e\^{}\{\textbackslash{}frac\{(.3 \textbackslash{}cdot x)\}\{2\}\} and call this function curve. To be clear the input should be x and it should return y. (1 point)}}\label{q1-to-begin-write-your-first-function-y-efrac.3-cdot-x2-and-call-this-function-curve.-to-be-clear-the-input-should-be-x-and-it-should-return-y.-1-point}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{curve <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+  
+\NormalTok{  y =}\StringTok{ }\KeywordTok{exp}\NormalTok{((.}\DecValTok{3}\OperatorTok{*}\StringTok{ }\NormalTok{x) }\OperatorTok{/}\StringTok{ }\DecValTok{2}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(y)}
+\NormalTok{\}}
+
+\KeywordTok{curve}\NormalTok{(}\DecValTok{2}\OperatorTok{/}\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2.718282
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# returns e}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsubsection{Q2 (save your code, you need the constructed code later)
+(3
+points)}\label{q2-save-your-code-you-need-the-constructed-code-later-3-points}
+
+The next step is to generate some data using this function:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  create an empty vector c() called \textbf{sim\_data}
+\item
+  make and save a list called \textbf{points} with numbers between 1 and
+  10 in steps of .5 using \textbf{seq()}
+\end{enumerate}
+
+3a. Use the numbers in \textbf{points} to generate y values using your
+\textbf{curve()} function and store them in \textbf{sim\_data}
+
+3b. also add noise to the \textbf{sim\_data} from a uniform distribution
+between -1.5 to 1.5 (hunt use runif())
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sim_data =}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\NormalTok{points =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.5}\NormalTok{)}
+\NormalTok{sim_data =}\StringTok{ }\KeywordTok{curve}\NormalTok{(points)}
+\NormalTok{noise =}\StringTok{ }\KeywordTok{runif}\NormalTok{(}\KeywordTok{length}\NormalTok{(points), }\OperatorTok{-}\FloatTok{1.5}\NormalTok{, }\FloatTok{1.5}\NormalTok{)}
+\NormalTok{sim_data =}\StringTok{ }\NormalTok{sim_data }\OperatorTok{+}\StringTok{ }\NormalTok{noise}
+\KeywordTok{plot}\NormalTok{(points, sim_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+Now we will create a dataframe with these x and y values called
+\textbf{dat\_full} and a subset of that data called \textbf{dat\_short}
+:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# create a dataframe}
+\NormalTok{dat_full<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(points,sim_data))}
+\KeywordTok{colnames}\NormalTok{(dat_full)<-}\KeywordTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{)}
+\CommentTok{# create a subset for illstruation}
+\NormalTok{dat_short<-}\KeywordTok{subset}\NormalTok{(dat_full,dat_full}\OperatorTok{$}\NormalTok{x}\OperatorTok{<}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{Generating curves to fit to the
+data:}\label{generating-curves-to-fit-to-the-data}
+
+Next, we will generate a few curves that will then fit to the data we
+just generated. The output of the functions that we will write will be
+the \textbf{Mean Squared Error} or \textbf{MSE} which is what is says.
+
+The function will:
+
+1.take in the values for \textbf{x} and \textbf{y}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  generate estimations or prediction of \textbf{y}, called
+  \textbf{y\_hat} using a specific function (in this example linear)
+\item
+  compare the estimated \textbf{y\_hat} with the true \textbf{y}, the
+  difference is called the \textbf{error}
+\item
+  MSE is the mean of the squared error
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## creating a simple linear function:}
+\NormalTok{linear <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data,v)\{}
+\NormalTok{  b1<-v}
+\NormalTok{  y_hat=b1}\OperatorTok{*}\NormalTok{data}\OperatorTok{$}\NormalTok{x}
+\NormalTok{  error =}\StringTok{ }\NormalTok{y_hat}\OperatorTok{-}\NormalTok{data}\OperatorTok{$}\NormalTok{y}
+\NormalTok{  MSE =}\StringTok{ }\KeywordTok{mean}\NormalTok{(error}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(MSE)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsubsection{Q3 Generate a polynomial function to fit to the data: (1
+point)}\label{q3-generate-a-polynomial-function-to-fit-to-the-data-1-point}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+Generate a polynomial function: \[y=b0+b1*x+b2*x^2+b3*x^3+b4*x^4\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{polynomial <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, v) \{}
+\NormalTok{  x =}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{x}
+\NormalTok{  y_hat =}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{4}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{3} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{4}
+\NormalTok{  error =}\StringTok{ }\NormalTok{y_hat }\OperatorTok{-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{y}
+\NormalTok{  MSE =}\StringTok{ }\KeywordTok{mean}\NormalTok{(error}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(MSE)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Fitting functions}\label{fitting-functions}
+
+We can use the standard optimization toolbox \textbf{optim} to find the
+best fitting parameters for a function. The optimization tool box
+requires us to provide:\\
+- starting values for the parameters\\
+- function\_name\\
+- data to fit function on\\
+- optimization method - possibly upper and lower bounds for the
+parameters
+
+What the optim toolbox will do is try to find the parameters settings
+that correspond the minimum value that is returned by the function that
+is being optimized. In our case it is trying to minimize the Mean
+Squared Error. It is beyond the scope of this course to discuss the
+different methods, but they all minimize the error (find the global
+minimum).
+
+Let's run through an example:\\
+- starting value = 0\\
+- function = linear - data = dat\_short - method = ``Brent'' (only one
+you can choose if you have just one parameter) - upper and lower bound
+values = 10 and -10
+
+results are stored in results1
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## perform some analyses on the short_data}
+
+\NormalTok{results1<-}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{),linear,}\DataTypeTok{data=}\NormalTok{dat_short,}\DataTypeTok{method=}\StringTok{"Brent"}\NormalTok{, }\DataTypeTok{upper=}\DecValTok{10}\NormalTok{, }\DataTypeTok{lower=}\OperatorTok{-}\DecValTok{10}\NormalTok{)}
+\NormalTok{results1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $par
+## [1] 0.4550293
+## 
+## $value
+## [1] 0.9408333
+## 
+## $counts
+## function gradient 
+##       NA       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL
+\end{verbatim}
+
+When you look at the results1 you get the parameter estimate:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results1}\OperatorTok{$}\NormalTok{par}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4550293
+\end{verbatim}
+
+But you also get the corresponding MSE:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results1}\OperatorTok{$}\NormalTok{value}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9408333
+\end{verbatim}
+
+\subsection{Visualizing the Fit}\label{visualizing-the-fit}
+
+to create residual (error) lines in plot we will create an empty list
+and fill it with the predicted y\_hat values for each x value in the
+data set, given the parameter we just estimated results1\$par:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit_data<-}\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(dat_short))\{}
+\NormalTok{  fit_data[i]<-results1}\OperatorTok{$}\NormalTok{par[}\DecValTok{1}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x[i]}
+\NormalTok{\}}
+\NormalTok{dat_short}\OperatorTok{$}\NormalTok{error1<-fit_data}
+\end{Highlighting}
+\end{Shaded}
+
+Next we plot the data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# simply use the plot() function to plot the true data}
+\KeywordTok{plot}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{y)}
+\CommentTok{# add a line with lines() that corresponds with the predicted y_hat. }
+\CommentTok{# to do so you need to invoke the linear function b1*x and use the estimated b1}
+\CommentTok{# so in this case: results1$par[1]*dat_short$x}
+\KeywordTok{lines}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,results1}\OperatorTok{$}\NormalTok{par[}\DecValTok{1}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x,}\DataTypeTok{col=}\StringTok{"green"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{# here we add segments that indicate the distance or error from the model to the data:  }
+\KeywordTok{segments}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{y,dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{error1, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\subsubsection{Q4 Now fit the polynomial function to the data and
+compare the model
+fits}\label{q4-now-fit-the-polynomial-function-to-the-data-and-compare-the-model-fits}
+
+\begin{itemize}
+\tightlist
+\item
+  Fit the model as above, and display the best fitted lines in a plots
+  (2 points)
+\item
+  Compare the MSE of the best fit for each model and indicate which is
+  the best fitting one. Why do you think did the best fitting model won?
+\end{itemize}
+
+\textbf{Hint 1}: use the method=``Nelder-Mead'', it does not require
+definitions of upper and lower bounds\\
+\textbf{Hint 2}: for the starting values use c c(-5,9,-4,1,.01)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results2<-}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DecValTok{9}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{,.}\DecValTok{01}\NormalTok{),polynomial,}\DataTypeTok{data=}\NormalTok{dat_short,}\DataTypeTok{method=}\StringTok{"Nelder-Mead"}\NormalTok{)}
+\NormalTok{fit_data<-}\KeywordTok{c}\NormalTok{()}
+\NormalTok{v =}\StringTok{ }\NormalTok{results2}\OperatorTok{$}\NormalTok{par}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(dat_short))\{}
+\NormalTok{  fit_data[i]<-v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x[i] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{4}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{3} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{4}
+\NormalTok{\}}
+\NormalTok{dat_short}\OperatorTok{$}\NormalTok{error2<-fit_data}
+\KeywordTok{plot}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{y)}
+\NormalTok{x =}\StringTok{ }\NormalTok{dat_short}\OperatorTok{$}\NormalTok{x}
+\NormalTok{y_hat =}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{4}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{3} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{4}
+
+\KeywordTok{lines}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,y_hat,}\DataTypeTok{col=}\StringTok{"green"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{y,dat_short}\OperatorTok{$}\NormalTok{x,dat_short}\OperatorTok{$}\NormalTok{error2, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\section{Cross-Validation}\label{cross-validation}
+
+We have fit the models only using part of the data (dat\_short), now we
+can see how the models perform if we use them to predict the data points
+that we have left out. This is the very basic principle of
+cross-validation. We first fit the model on part of the data and then
+see how it performs on a separate set of data (validation). In practice
+we may use slightly different strategies to do this, but the principle
+is the same.
+
+\subsubsection{Q5 check the goodness of fit for the full data set using
+the parameter estimates derived from the small datasets. Describe which
+model fits the data the best and explain why, also plot the results to
+illustrate your point. (2
+points)}\label{q5-check-the-goodness-of-fit-for-the-full-data-set-using-the-parameter-estimates-derived-from-the-small-datasets.-describe-which-model-fits-the-data-the-best-and-explain-why-also-plot-the-results-to-illustrate-your-point.-2-points}
+
+\textbf{hint 1}: just use same script as before but change the data file
+to dat\_full. \textbf{hint 2}: use ylim = c(-2,12)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results2<-}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DecValTok{9}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{,.}\DecValTok{01}\NormalTok{),polynomial,}\DataTypeTok{data=}\NormalTok{dat_short,}\DataTypeTok{method=}\StringTok{"Nelder-Mead"}\NormalTok{)}
+\NormalTok{fit_data<-}\KeywordTok{c}\NormalTok{()}
+\NormalTok{v =}\StringTok{ }\NormalTok{results2}\OperatorTok{$}\NormalTok{par}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(dat_full))\{}
+\NormalTok{  fit_data[i]<-v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_full}\OperatorTok{$}\NormalTok{x[i] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_full}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{4}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_full}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{3} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\NormalTok{dat_full}\OperatorTok{$}\NormalTok{x[i]}\OperatorTok{^}\DecValTok{4}
+\NormalTok{\}}
+\NormalTok{dat_full}\OperatorTok{$}\NormalTok{error2<-fit_data}
+\KeywordTok{plot}\NormalTok{(dat_full}\OperatorTok{$}\NormalTok{x,dat_full}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DecValTok{10}\NormalTok{))}
+\NormalTok{x =}\StringTok{ }\NormalTok{dat_full}\OperatorTok{$}\NormalTok{x}
+\NormalTok{y_hat =}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{4}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{3} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{4}
+
+\KeywordTok{lines}\NormalTok{(dat_full}\OperatorTok{$}\NormalTok{x,y_hat,}\DataTypeTok{col=}\StringTok{"green"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(dat_full}\OperatorTok{$}\NormalTok{x,dat_full}\OperatorTok{$}\NormalTok{y,dat_full}\OperatorTok{$}\NormalTok{x,dat_full}\OperatorTok{$}\NormalTok{error2, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\section{2. Fitting Ebbinghaus data.}\label{fitting-ebbinghaus-data.}
+
+Now let's look at some real data
+
+Ebbinghaus proposed the following equation to best described how savings
+change over time:\\
+\[  Q(t) = u1 / ((log(t))^a1 + u1), \] where the u1 and a1 are free
+parameters and log is taken with base 10. Q(t) are the savings at time
+interval t. Note that he calculated the best fitting parameters by hand,
+using \textbf{minutes} for the time interval. According to these
+calculations he suggested that u1= 1.84 and a1 = 1.25 were the best
+fitting parameters.
+
+\subsection{\texorpdfstring{Please load the Ebbinghaus data
+(``Ebbinghaus.txt''), and see if you can fit the same model to his
+original data and see if you get the same parameters. Note the intervals
+in this file are in
+\textbf{seconds}.}{Please load the Ebbinghaus data (Ebbinghaus.txt), and see if you can fit the same model to his original data and see if you get the same parameters. Note the intervals in this file are in seconds.}}\label{please-load-the-ebbinghaus-data-ebbinghaus.txt-and-see-if-you-can-fit-the-same-model-to-his-original-data-and-see-if-you-get-the-same-parameters.-note-the-intervals-in-this-file-are-in-seconds.}
+
+Later the simpler exponential function has been proposed which is
+described by the equation\\
+\[  Q(t)=(1+u1*t)^-a1 \]\\
+where Q(t) is savings at time t and μ1 and a1 are parameters.
+
+first lets import some real data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#importing data}
+\NormalTok{ebbing_data <-}\StringTok{ }\KeywordTok{read.delim}\NormalTok{(}\StringTok{"Ebbinghaus.txt"}\NormalTok{,}\DataTypeTok{header=} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{sep =} \StringTok{"}\CharTok{\textbackslash{}t}\StringTok{"}\NormalTok{) }\CommentTok{# open a file, will be stored as data.frame}
+\CommentTok{# ebbing_data$Interval_s}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Q6 Check if the exponential indeed fits better, report
+the fit and the parameters. Show in a plot(s) how the best fitting
+models fit the data points. (3 points, 2 for correct fits, 1 for
+plot)}\label{q6-check-if-the-exponential-indeed-fits-better-report-the-fit-and-the-parameters.-show-in-a-plots-how-the-best-fitting-models-fit-the-data-points.-3-points-2-for-correct-fits-1-for-plot}
+
+\textbf{hint} : use method=``L-BFGS-B'', upper=10, lower=-10 and c(2,1)
+as starting values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ebbinghaus =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, v) \{}
+\NormalTok{  x =}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{Interval_s}
+\NormalTok{  y_hat =}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{ }\NormalTok{((}\KeywordTok{log}\NormalTok{(x))}\OperatorTok{^}\NormalTok{v[}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{])}
+\NormalTok{  error =}\StringTok{ }\NormalTok{y_hat }\OperatorTok{-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{Ebbinghaus}
+\NormalTok{  MSE =}\StringTok{ }\KeywordTok{mean}\NormalTok{(error}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(MSE)}
+\NormalTok{\}}
+
+\NormalTok{ebbing_results<-}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\FloatTok{1.84}\NormalTok{, }\FloatTok{1.25}\NormalTok{),ebbinghaus,}\DataTypeTok{data=}\NormalTok{ebbing_data,}\DataTypeTok{method=}\StringTok{"L-BFGS-B"}\NormalTok{, }\DataTypeTok{upper =} \DecValTok{10}\NormalTok{, }\DataTypeTok{lower =} \OperatorTok{-}\DecValTok{10}\NormalTok{)}
+
+\NormalTok{fit_data<-}\KeywordTok{c}\NormalTok{()}
+\NormalTok{v =}\StringTok{ }\NormalTok{ebbing_results}\OperatorTok{$}\NormalTok{par}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(ebbing_data))\{}
+\NormalTok{  fit_data[i]<-}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{ }\NormalTok{((}\KeywordTok{log}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s[i]))}\OperatorTok{^}\NormalTok{v[}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{])}
+\NormalTok{\}}
+\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{error1<-fit_data}
+\NormalTok{x =}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Interval_s}
+\NormalTok{y =}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus}
+
+\KeywordTok{plot}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus)}
+\NormalTok{y_hat =}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{log}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s)}\OperatorTok{^}\NormalTok{v[}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{])}
+\KeywordTok{lines}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, y_hat, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus, ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{error1, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ebbinghaus_simple =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, v) \{}
+\NormalTok{  x =}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{Interval_s}
+\NormalTok{  y_hat =}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{x)}\OperatorTok{^}\NormalTok{(}\OperatorTok{-}\NormalTok{v[}\DecValTok{2}\NormalTok{])}
+\NormalTok{  error =}\StringTok{ }\NormalTok{y_hat }\OperatorTok{-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{Ebbinghaus}
+\NormalTok{  MSE =}\StringTok{ }\KeywordTok{mean}\NormalTok{(error}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(MSE)}
+\NormalTok{\}}
+
+\NormalTok{ebbing_results<-}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\FloatTok{1.84}\NormalTok{, }\FloatTok{1.25}\NormalTok{),ebbinghaus_simple,}\DataTypeTok{data=}\NormalTok{ebbing_data,}\DataTypeTok{method=}\StringTok{"L-BFGS-B"}\NormalTok{, }\DataTypeTok{upper =} \DecValTok{10}\NormalTok{, }\DataTypeTok{lower =} \OperatorTok{-}\DecValTok{10}\NormalTok{)}
+
+\NormalTok{fit_data<-}\KeywordTok{c}\NormalTok{()}
+\NormalTok{v =}\StringTok{ }\NormalTok{ebbing_results}\OperatorTok{$}\NormalTok{par}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(ebbing_data))\{}
+\NormalTok{  fit_data[i]<-}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Interval_s[i])}\OperatorTok{^}\NormalTok{(}\OperatorTok{-}\NormalTok{v[}\DecValTok{2}\NormalTok{])}
+\NormalTok{\}}
+\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{error1<-fit_data}
+\NormalTok{x =}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Interval_s}
+\NormalTok{y =}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus}
+
+\KeywordTok{plot}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus)}
+\NormalTok{y_hat =}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{v[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{ebbing_data}\OperatorTok{$}\NormalTok{Interval_s)}\OperatorTok{^}\NormalTok{(}\OperatorTok{-}\NormalTok{v[}\DecValTok{2}\NormalTok{])}
+\KeywordTok{lines}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, y_hat, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{Ebbinghaus, ebbing_data}\OperatorTok{$}\NormalTok{Interval_s, ebbing_data}\OperatorTok{$}\NormalTok{error1, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LC1_2_fitting_functions_1_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+
+\end{document}
